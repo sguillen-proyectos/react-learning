@@ -13,10 +13,11 @@ Learning React System
 # Topics
 ## Week 1
 - React documentation
-- Lifecycle management
-- Higher Order Components
-- Context API
-- New Features - read Cory's link
+  - Lifecycle management
+  - Higher Order Components
+  - Context API
+  - New Features - read Cory's link
+  - Others
 
 ## Week 2
 - React router
@@ -28,6 +29,8 @@ Learning React System
 
 ## Week 4
 - React patterns and antipatterns - read Cory's link
+- React docs API Reference
+- React docs Contributing
 - React internals
   - Fiber
   - Reconciliation
@@ -37,12 +40,29 @@ Learning React System
 # Project
 Create a point of sale applications for stores, where there will be a list of items available, list clients, sell certain things to clients (stores), see reports per store, in general.
 
-## Requirements
+## Technical Requirements
 - The application **must** have authentication
 - It **must** be responsive
-- It should use CSS preprocessors
+- It should use a CSS preprocessor
 - There should be three roles: administrator, seller and clients (stores)
 - It **must** have a backend
+
+## Behavior
+For clients
+- Clients can see the list of products by category and price.
+- Clients can request a purchase so a seller can go to the store with the requested items.
+- Clients might see a purchase report.
+
+For sellers
+- Sellers can see list of products by category and price
+- Sellers can see client purchase requests and process them (the purchase request will be assigned to the seller) purchase request might have a state: `open`, `in progress` and `processed`
+- Sellers might see a clients-per-month report
+
+For administrators
+- CRUD for sellers
+- CRUD for clients
+- CRUD for products
+- Assign a purchase request to a seller
 
 
 # Flashcards
@@ -78,3 +98,52 @@ A: React treats components starting with lowercase letters as DOM tags.
 
 Q: What is a very important characteristic of React `props`?
 A: React components must act as pure functions in the sense that props must never be updated inside a component. They must be read-only
+
+--- 2018-08-08 ---
+Q: What are pure functions?
+A: A pure function is a function that does not modify the inputs and always return the same result for the same inputs.
+
+Q: What is the `componentDidMount` method?
+A: It is a lifecycle hook that is executed just after the component output has been rendered to the DOM.
+
+Q: What is the `componentWillUnmount` method?
+A: It is a lifecycle hook that is executed when the component will be removed from the DOM.
+
+Q: Explain how updating an state could lead to an unexpected behavior?
+A: `this.props` and `this.state` may be updated asynchronously, so if we have to calculate the new state based on `props` or `state` updating directly could lead to problems as `props` and `state` could be updated. One way to solve this problems is to use the second way of `setState` which instead of receiving an object it will receive a callback function which will receive as parameters the previous state and the properties at the time we want to update the state.
+
+Q: How do events work on React?
+A: React events are defined as camelCase and receive a method instead of a string. The difference that the event object passed as argument is an instance of the `SyntheticEvent` class which is a wrapper for the original native event with the same interface. The difference of this `SyntheticEvent` class is that has the same behavior in all browsers.
+
+Q: In terms of React events, what is the problem with this approach?
+```
+render() {
+  return <button onClick={(e) => this.handleClick(e)}>
+    Click me
+  </button>
+}
+```
+A: The problem is that every time the component is rendered it will create a new callback which could lead to memory leaks.
+
+Q: Mention some ways for conditional rendering
+A: Inline if with && logical operator
+```
+<div>
+  { someCondition &&
+    <SomeComponent />
+  }
+</div>
+```
+if-else conditional operator
+```
+<div>
+  {someCondition ? (
+    <FooComponent />
+  ): (
+    <BarComponent />
+  )}
+</div>
+```
+
+Q: In which cases a component `Foo` will no be rendered even if it's called in some other component `Bar`?
+A: When the return value of `render` method of component `Foo` is `''`, `false` or `null`
