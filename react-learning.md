@@ -147,3 +147,60 @@ if-else conditional operator
 
 Q: In which cases a component `Foo` will no be rendered even if it's called in some other component `Bar`?
 A: When the return value of `render` method of component `Foo` is `''`, `false` or `null`
+
+--- 2018-08-13 ---
+Q: How is the short syntax for a react `Fragment` and in which cases it is good to use it?
+A: It is
+```
+<>
+  ...content
+</>
+```
+And it is ok to use it when the fragment will not receive any property.
+
+Q: In case of labeling input controls, what is property used?
+A: It is the `htmlFor` property on `label` elements
+
+Q: How can modules be loaded dynamically?
+A: By using the `import(module)` function instead of the `import` directive from ES6
+
+Q: How does the `import` function works with Create React App?
+A: Create React App when detecting a call to `import` function, will create chunk javascript files where the async modules are and can be loaded asynchronously.
+
+Q: How is context defined in react?
+A: Using the `React.createContext` it returns a `Provider` and a `Consumer` which are used when initializing and consuming the context. `React.createContext` receives a default value that can be used by the `Consumer` when it does not match a `Provider`.
+
+Q: How does a `Consumer` gets data from the `Provider`?
+A: A component needs to be rendered and the content must be a function that receives the data from the provider:
+```
+<SomeContext.Consumer>
+  { (someValue) => <SomeOtherComponent someValue={someValue} />}
+</SomeContext.Consumer>
+```
+
+Q: How can I update the context from nested components?
+A: Just by adding another field that is a function on the initial values when calling `createContext` and finally calling that function from the nested component just as if it's another handler.
+
+Q: When using multiple contexts, how is the hierarchy when initializing them and when consuming them?
+A: It is a tree hierarchy in the next way:
+For initializing:
+```
+<Context1.Provider value1="value1">
+  <Context2.Provider value2="value2">
+    <Content ... />
+  </Context2.Provider>
+</Context1.Provider>
+```
+
+For consuming:
+```
+<Context1.Consumer>
+  {value1 => {
+    <Context2.Consumer>
+      {value2 => {
+        <Something value1 value2 />
+      }}
+    </Context2.Consumer>
+  }}
+</Context1.Consumer>
+```
