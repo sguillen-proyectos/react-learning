@@ -204,3 +204,18 @@ For consuming:
   }}
 </Context1.Consumer>
 ```
+--- 2018-08-14 ---
+Q: What is are error boundaries.
+A: It is a declarative way to catch render errors that happened in the component tree.
+
+Q: How do I create an error boundary?
+A: It only needs to add the `componentDidCatch` hook in the component class to indicate that the component is an error boundary.
+
+Q: What does the `componentDidCatch` method receives?
+A: It receives the error as such and the stack trace
+
+Q: Why use an error boundary instead of the `try/catch` statement?
+A: Although the try/catch statement can work great, it would not preserve the declarative nature of react, error boundaries preserve it.
+
+Q: In which cases error boundaries won't catch errors?
+A: When the errors are on a event handler, and asynchronous call, server side rendering and errors thrown in the error boundary itself rather than its children.
