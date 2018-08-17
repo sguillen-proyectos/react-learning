@@ -205,7 +205,7 @@ For consuming:
 </Context1.Consumer>
 ```
 --- 2018-08-14 ---
-Q: What is are error boundaries.
+Q: What are error boundaries?
 A: It is a declarative way to catch render errors that happened in the component tree.
 
 Q: How do I create an error boundary?
@@ -219,3 +219,81 @@ A: Although the try/catch statement can work great, it would not preserve the de
 
 Q: In which cases error boundaries won't catch errors?
 A: When the errors are on a event handler, and asynchronous call, server side rendering and errors thrown in the error boundary itself rather than its children.
+
+--- 2018-08-15 ---
+Q: What is a higher order component and a higher order function?
+A: A HOC is a component that returns a component. A HOF is a function that returns a function
+
+Q: How is a HOC defined?
+A:
+```
+function someHOC(SomeComponent) {
+  return class extends React.Comonent {
+    render() {
+      return <SomeComponent ...this.props />
+    }
+  }
+}
+```
+
+Q: How a HOC avoid us to use inheritance?
+A: Because the HOC has logic that can be reused so a react philosophy is to use composition over inheritance.
+
+Q: What happens when a component has a static method and this component is wrapped by a HOC?
+A: By default the static methods won't be available after passing the wrapped componet as the result is a higher component without those static methods. One way to solve the issue is to assign the static methods to the higher component one by one or using a third-party library.
+
+Q: What are some advices for HOC?
+A: Never mutate the wrapped component, never use a HOC in the render method, never mutate the wrapped component.
+
+Q: When I want to pass a property that is a HOC specific, how do I avoid that property to get to the wrapped component?
+A: Instead of just passing `...props` to the wrapped component we filter before and then we pass the filtered props to the wrapped component.
+```
+render() {
+  const { propForHOC, ...propsForWrappedComponent } = this.props;
+  return <WrappedComponent ...propsForWrappedcomponent />;
+}
+```
+
+Q: What is a good way to debug when using a HOC?
+A: It is when adding the `displayName` attribute to the wrapper component:
+```
+function someHOC(Component) {
+  class Wrapper extends React.Component {
+    render() {
+      return <Component />
+    }
+  }
+  Wrapper.displayName = 'someHOC'
+  return Wrapper;
+}
+```
+
+Q: Why React needs to be imported or in scope when using JSX?
+A: Because as it will be transpiled into `React.createElement`, `React` needs to be somewhere
+
+--- 2018-08-15 ---
+Q: What is the signature of `React.createElement`?
+A: `React.createElement(Component, props, ...children)`
+
+Q: What is the difference between:
+  <Message msg="&lt; <" />
+  <Message msg={"&lt; <"} />
+A: The difference is that the first one will be evaluated and print '< <' and the second will be unescaped and will display '&lt; <'
+
+Q: When a property is passed without a value, what does it mean?
+A: It means that the default value will be evaluated as true
+
+Q: What is a good recomendation when using profiling during development?
+A: To disable react developer tools extension.
+
+Q: What is the purpose of `shouldComponentUpdate`?
+A: It is a lifecycle hook that specifies whether a component should update by returning true or false. It can be used to avoid unnecesary renders.
+
+Q: Without using `shouldComponentUpdate`, what causes a re-render?
+A: If a component updates its state it will re-render and if some of the properties assigned to the component change they the component will be re-rendered. One thing is to compare all properties or only the ones that we are interested or try to avoid passing unnecessary properties which could lead to unwanted re-renders.
+
+Q: What is the difference between `React.Component` and `React.PureComponent`?
+A: For `React.Component` we will need to implement the `shouldComponentUpdate` method but with `React.PureComponent` it will implement it by using a swallow comparasion of the old and new properties and with old and new state to update.
+
+Q: In which cases `React.PureComponent` would not work as expected?
+A: When mutating an state, in that case it will be the same reference so it will continue even if the values are different so if using inmutability `React.PureComponent` will work as expected.
