@@ -297,3 +297,66 @@ A: For `React.Component` we will need to implement the `shouldComponentUpdate` m
 
 Q: In which cases `React.PureComponent` would not work as expected?
 A: When mutating an state, in that case it will be the same reference so it will continue even if the values are different so if using inmutability `React.PureComponent` will work as expected.
+
+
+--- 2018-08-27 ---
+Q: What is the library and class required to create a portal?
+A: `react-dom` library and the `ReactDOM` class.
+
+Q: Explain React portals and how they are defined.
+A: React portals is a way to render components outside the hierarchy of the parent component.
+
+It is used in the render method of a component and it receives as parameters what needs to be rendered and where (outside of the parent).
+
+ReactDOM.createPortal(component, domNode)
+
+Q: How do events work with React portals?
+A: Although things are rendered outside the parent component hierarchy, if an event occurs on the component that was rendered on the portal, it can be handled by the React component that returned a portal in the render method.
+
+Q: When using React without ES6, how is the behavior of mixins?
+A: The behavior is that if there is a repeated lifecycle hook in both the component and the mixin, React guarantees that both will be called in the order
+
+Q: In which cases index as key may be good and in which cases it can be a problem?
+A: When the items will be reordered it will be a problem to have index as key, otherwise it might not get any trouble
+
+Q: What is the requirement for keys?
+A: That the key must be unique among siblings but not globally
+
+Q: What are the two assumptions used in the reconciliation algorithm?
+A:
+- Two elements of different types will produce two different trees
+- Developer can specify which elements can be stable using a key
+
+Q: What happens when two elements are of the same type?
+A: It will compare its attributes and update them, also React will only update the properties that were updated for `style` it will only update the fields updated. It will not unmount them.
+
+Q: What happens when two component elements are of the same type?
+A: The state is maintained but properties are updated on the underlying component instance and calls `componentWillReceiveProps` and `componentWillUpdate` lifecycle hooks, then it calls the `render` method and and will recurse on the previous result and the new result.
+
+Q: Why keys are very important in React?
+A: When the diff algorithm recurses children without keys it will compare the previous tree with the new tree and for example if an item was added a the head of the list it will compare with the previous one and see it is different and will rerender existing elements. With key React will know which item was just inserted.
+
+Q: What are some common cases when `refs` may be needed?
+A:
+- When we want to work with focus, text selection, media playback
+- When we want to trigger imperative animations
+- When we want to integrate with third party DOM libraries
+
+Q: How is a ref defined?
+A:
+class Foobar extends Component {
+  constructor(props) {
+    super(props);
+    this.someRef = React.createRef();
+  }
+  ...
+  render() {
+    return <input ref={this.someRef} />
+  }
+}
+
+Q: How is the `current` property of a ref trated with elements and components?
+A: For elements `current` will reference the DOM node while `current` for a React component will reference the mounted instance so methods in this component could be called.
+
+Q: What are some restrictions for `refs`?
+A: They cannot be used to reference functional components as they don't have an instance however inside functional components `ref` can be used as long as it references a class based component.
